@@ -89,7 +89,37 @@ function getById(id) {
       }
     });
   }
-  
-return {loadData,get,getById,add}
+  function update(item,id) {
+    return new Promise(async (resolve, reject) => {
+      const client = new MongoClient(url);
+      try {
+        await client.connect();
+        const db = client.db(dbname);
+        const aitem = await db.collection('newspapers').insertOne(item)
+        //console.log(aitem.insertedId)
+        resolve(aitem.insertedId);
+        client.close();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  function deleteItem(id) {
+    return new Promise(async (resolve, reject) => {
+      const client = new MongoClient(url);
+      try {
+        await client.connect();
+        const db = client.db(dbname);
+        const aitem = await db.collection('newspapers').insertOne(item)
+        //console.log(aitem.insertedId)
+        resolve(aitem.insertedId);
+        client.close();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+return {loadData,get,getById,add,update,deleteItem}
 }
 module.exports=circulationRepo()

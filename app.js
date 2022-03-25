@@ -41,6 +41,17 @@ async function main(){
     }
     const addedItem= await cirRepo.add(newItem)
     assert(addedItem)
+
+    const getaddedItem= await cirRepo.getById(addedItem)
+    //console.log(getaddedItem)
+    assert.deepEqual(getaddedItem,newItem)
+
+    //update item
+    const updateItem= await cirRepo.update(item,id)
+
+
+    //delete item
+    const deleteItem=await cirRepo.deleteItem(id)
     }
     catch(error){
         console.log(error)
