@@ -47,11 +47,22 @@ async function main(){
     assert.deepEqual(getaddedItem,newItem)
 
     //update item
-    const updateItem= await cirRepo.update(item,id)
-
+    const updateItem={
+        "Newspaper": "My New paper",
+        "Daily Circulation, 2006": 1,
+        "Daily Circulation, 2013": 1,
+        "Change in Daily Circulation, 2006-2013": 1,
+        "Pulitzer Prize Winners and Finalists, 1990-2003": 0,
+        "Pulitzer Prize Winners and Finalists, 2004-2014": 0,
+        "Pulitzer Prize Winners and Finalists, 1990-2014": 0
+    }
+    const updateItemId= await cirRepo.update(updateItem,addedItem)
+    const getupdatedItem= await cirRepo.getById(addedItem)
+    //console.log(getupdatedItem)
+    //assert.deepEqual(getupdatedItem,updateItem)
 
     //delete item
-    const deleteItem=await cirRepo.deleteItem(id)
+    //const deleteItem=await cirRepo.deleteItem(id)
     }
     catch(error){
         console.log(error)
