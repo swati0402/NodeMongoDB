@@ -62,7 +62,8 @@ async function main(){
     //assert.deepEqual(getupdatedItem,updateItem)
 
     //delete item
-    //const deleteItem=await cirRepo.deleteItem(id)
+    const deleteItem=await cirRepo.deleteItem(getdata[4]._id)
+    assert(deleteItem)
     }
     catch(error){
         console.log(error)

@@ -96,7 +96,7 @@ function getById(id) {
         await client.connect();
         const db = client.db(dbname);
         const aitem = await db.collection('newspapers')
-        .findOneAndReplace({ _id: ObjectID(id) },item)
+        .findOneAndReplace({ _id: ObjectID(id) },item,{returnOrginal:false})
 
         //console.log(aitem.insertedId)
         resolve(aitem);
@@ -112,9 +112,9 @@ function getById(id) {
       try {
         await client.connect();
         const db = client.db(dbname);
-        const aitem = await db.collection('newspapers').insertOne(item)
+        const aitem = await db.collection('newspapers').deleteOne({ _id: ObjectID(id) })
         //console.log(aitem.insertedId)
-        resolve(aitem.insertedId);
+        resolve(aitem);
         client.close();
       } catch (error) {
         reject(error);
