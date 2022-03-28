@@ -64,6 +64,14 @@ async function main(){
     //delete item
     const deleteItem=await cirRepo.deleteItem(getdata[4]._id)
     assert(deleteItem)
+
+    //avergae finalist
+    const avgFinalist= await cirRepo.averageItems()
+    console.log("Average Finalist: "+avgFinalist)
+
+    //avergae by change including negative values
+    const avgFinalistChange= await cirRepo.averageItemsbyChange()
+    console.log(avgFinalistChange)
     }
     catch(error){
         console.log(error)

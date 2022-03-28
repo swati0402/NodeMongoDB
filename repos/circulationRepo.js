@@ -113,7 +113,6 @@ function getById(id) {
         await client.connect();
         const db = client.db(dbname);
         const aitem = await db.collection('newspapers').deleteOne({ _id: ObjectID(id) })
-        //console.log(aitem.insertedId)
         resolve(aitem);
         client.close();
       } catch (error) {
@@ -121,7 +120,56 @@ function getById(id) {
       }
     });
   }
-
-return {loadData,get,getById,add,update,deleteItem}
+  function averageItems() {
+    return new Promise(async (resolve, reject) => {
+      const client = new MongoClient(url);
+      try {
+        await client.connect();
+        const db = client.db(dbname);
+        const aitem = await db.collection('newspapers')
+        .aggregate([{$group:{
+          _id:null,
+          avgFinalist:{ $avg:"$Pulitzer Prize Winners and Finalists, 1990-2014"}
+        }}]).toArray()
+        //console.log(aitem.toArray())
+        resolve(aitem[0].avgFinalist);
+        client.close();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  function averageItemsbyChange() {
+    return new Promise(async (resolve, reject) => {
+      const client = new MongoClient(url);
+      try {
+        await client.connect();
+        const db = client.db(dbname);
+        const aitem = await db.collection('newspapers')
+        .aggregate([
+          {$project:{
+            "Newspaper": 1,
+            "Pulitzer Prize Winners and Finalists, 1990-2014": 1,
+            "Change in Daily Circulation, 2004-2013": 1,
+            overallChange:{
+              $cond:{
+                if:{$gte:["$Change in Daily Circulation, 2004-2013",0]}, then: "positive", else: "negative"
+              }
+            }
+          }},
+          {$group:{
+            _id:"$overallChange",
+            avgFinalist:{ $avg:"$Pulitzer Prize Winners and Finalists, 1990-2014"}
+          }}
+        ]).toArray()
+        //console.log(aitem)
+        resolve(aitem);
+        client.close();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+return {loadData,get,getById,add,update,deleteItem,averageItems,averageItemsbyChange}
 }
 module.exports=circulationRepo()
